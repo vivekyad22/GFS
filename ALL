@@ -1,1 +1,73 @@
 # GFS
+
+http://www.slashroot.in/gfs-gluster-file-system-complete-tutorial-guide-for-an-administrator
+https://www.digitalocean.com/community/tutorials/how-to-create-a-redundant-storage-pool-using-glusterfs-on-ubuntu-servers
+
+There is a mechanism available in the form of a module called FUSE(File System in User Space), to run your own file system code without touching the kernel. This module will provide a bridge between your file system and VFS. Hence you can make any new file system and make that compatible with Linux, with the help of FUSE module. 
+
+Before installing gluster, let's make our configuration pretty clear. We will be having two servers called server1 & server2, which will be our server nodes. These two server nodes will be combinely making a storage volume, which our client server will be mounting.
+
+gluster peer probe server2
+gluster volume create test-volume server1:/exp1/ server2:/exp2
+
+Different types of volumes in gluster file system
+--------------------------------------------------------------------------------------------------
+
+Distributed Glusterfs Volume
+Distributed Gluster volume's are used to spread files randomly across the number of bricks in the volume. In other words, file 1 might be stored in the first brick, and file 2 might be stored in the other brick. There is no redundancy provided by gluster if you have created a distributed volume. The main purpose behind making a distributed storage volume with gluster is to easily scale the volume size.
+
+Replicated Volumes in gluster file system
+Replicated volumes are made for better reliability and data redundancy. So even if one brick is failed, then also the data is protected and safe, and is also accessible.
+
+[root@server1 ~]# gluster volume create test-volume replica 2 server1:/exp1 server2:/exp2
+
+Striped Volumes in Gluster File system
+Striped volume stores data in the bricks after dividing into different stripes. So imagine if you have a large file and that's stored in the first brick, and you have thousands of clients accessing your volume at the same time. Due to large number of clients accessing the same file in the same brick the performance will be reduced.
+
+[root@server1 ~]# gluster volume create test-volume stripe 2 server1:/exp1 server2:/exp2
+
+
+Distributed Striped Volumes in Gluster File System
+Distributed striped volumes are very much similar to striped volume, with an added advantage that you can distribute the stripes across more number of bricks on more nodes. In other words, you can distribute data with 4 stripes onto 8 servers.
+
+[root@server1 ~]# gluster volume create test-volume stripe 2 192.168.30.132:/exp1/ 192.168.30.132:/exp3/ 192.168.30.133:/exp2/ 192.168.30.133:/exp4
+
+
+Distributed Replicated Volumes in Gluster
+
+In distributed replicated volumes bricks must be a multiple of replica count. Files are distributed over replicated sets of bricks. It is used for an environment where high availability due to redundancy and scaling storage is very much critical.
+
+[root@server1 ~]# gluster volume create test-volume replica 2 server1:/exp1/ server1:/exp3/ server2:/exp2/ server2:/exp4
+
+[root@server1 ~]# gluster volume start test-volume
+
+[root@client ~]# mount.glusterfs server1:/test-volume /mnt
+
+Add new brick
+
+[root@server1 ~]# gluster volume add-brick test-volume server2:/exp5
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
