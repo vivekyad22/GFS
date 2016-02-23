@@ -47,7 +47,9 @@ Add new brick
 
 [root@server1 ~]# gluster volume add-brick test-volume server2:/exp5
 
+[root@server2 ~]# gluster volume rebalance test-volume fix-layout start
 
+[root@server1 ~]# gluster volume remove-brick test-volume server2:/exp4
 
 
 
