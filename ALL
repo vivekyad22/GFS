@@ -1,17 +1,23 @@
 # GFS
-
+===========================================================================================================================
 http://www.slashroot.in/gfs-gluster-file-system-complete-tutorial-guide-for-an-administrator
 https://www.digitalocean.com/community/tutorials/how-to-create-a-redundant-storage-pool-using-glusterfs-on-ubuntu-servers
+
+
+Aggregate multiple storage servers with the help of TCP or Infiniband(A high performance link used in data Centre's to provide fast, and high throughput connection ) and make a very large storage.
+
+GlusterFS does the exact same thing of combining multiple storage servers to form a large storage.
+
+GlusterFS allows you to create different kinds of storage configurations, many of which are functionally similar to RAID levels. For instance, you can stripe data across different nodes in the cluster, or you can implement redundancy for better data availability.
 
 There is a mechanism available in the form of a module called FUSE(File System in User Space), to run your own file system code without touching the kernel. This module will provide a bridge between your file system and VFS. Hence you can make any new file system and make that compatible with Linux, with the help of FUSE module. 
 
 Before installing gluster, let's make our configuration pretty clear. We will be having two servers called server1 & server2, which will be our server nodes. These two server nodes will be combinely making a storage volume, which our client server will be mounting.
-
 gluster peer probe server2
 gluster volume create test-volume server1:/exp1/ server2:/exp2
 
 Different types of volumes in gluster file system
---------------------------------------------------------------------------------------------------
+===========================================================================================================================
 
 Distributed Glusterfs Volume
 Distributed Gluster volume's are used to spread files randomly across the number of bricks in the volume. In other words, file 1 might be stored in the first brick, and file 2 might be stored in the other brick. There is no redundancy provided by gluster if you have created a distributed volume. The main purpose behind making a distributed storage volume with gluster is to easily scale the volume size.
@@ -44,14 +50,26 @@ In distributed replicated volumes bricks must be a multiple of replica count. Fi
 [root@client ~]# mount.glusterfs server1:/test-volume /mnt
 
 Add new brick
-
+ If a volume is expanded or shrunk in GlusterFS, the data needs to be re-balanced among the various bricks included in the volume.
+ 
 [root@server1 ~]# gluster volume add-brick test-volume server2:/exp5
 
 [root@server2 ~]# gluster volume rebalance test-volume fix-layout start
 
 [root@server1 ~]# gluster volume remove-brick test-volume server2:/exp4
 
+Restrict Access to the Volume
+sudo gluster volume set volume1 auth.allow gluster_client_IP_addr
 
+
+INNOVATIONS
+=====================================================================================================================
+
+- 24007 TCP for the Gluster Daemon
+- 24008 TCP for Infiniband management (optional unless you are using IB)
+- One TCP port for each brick in a volume. So, for example, if you have 4 bricks in a volume, port 24009 – 24012 would be used in GlusterFS 3.3 & below, 49152 - 49155 from GlusterFS 3.4 & later.
+- 38465, 38466 and 38467 TCP for the inline Gluster NFS server.
+- Additionally, port 111 TCP and UDP (since always) and port 2049 TCP-only (from GlusterFS 3.4 & later) are used for port mapper and should be open.
 
 
 
