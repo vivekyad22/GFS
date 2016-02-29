@@ -1,5 +1,8 @@
 # GFS
 ===========================================================================================================================
+Knowledge and configuration of distributed filesystems like GlusterFS & AFS . Used GlusterFS in AWS EC2 for bootstrapping & autoscaling .
+
+
 http://www.slashroot.in/gfs-gluster-file-system-complete-tutorial-guide-for-an-administrator
 https://www.digitalocean.com/community/tutorials/how-to-create-a-redundant-storage-pool-using-glusterfs-on-ubuntu-servers
 
