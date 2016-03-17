@@ -77,6 +77,10 @@ INNOVATIONS
 
 
 
+FILE
+
+The default vol file is sufficient to start with. You may just have to edit the IP addresses. They are placed under /etc/glusterfs/glusterfs.vol and /etc/glusterfs/glusterfsd.vol. Customize it to suit your needs. Additional examples are available under doc/examples directory.
+
 
 
 
